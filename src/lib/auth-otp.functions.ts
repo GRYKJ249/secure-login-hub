@@ -103,6 +103,8 @@ export const requestPhoneCode = createServerFn({ method: "POST" })
         error: "send_failed" as const,
         reason: result.reason,
         detail: "detail" in result ? result.detail : undefined,
+        allowedNumbers: "allowedNumbers" in result ? result.allowedNumbers : undefined,
+
         instanceState: state.ok ? state.state : state.reason,
       };
     }
