@@ -1,0 +1,20 @@
+{
+  "source": "https://github.com/GRYKJ249/ray-chat-bridge",
+  "capabilities": [
+    {"capability":"application_code","source":"GitHub repository","outcome":"migrate","status":"migrated","next_action":"Verify the migrated TanStack application in preview."},
+    {"capability":"database_schema","source":"Supabase and Drizzle migrations","outcome":"migrate_to_lovable_cloud","status":"migrated","next_action":"Run final security lint verification."},
+    {"capability":"database_records","source":"No export supplied","outcome":"migrate_to_lovable_cloud","status":"pending","next_action":"Request sanitized CSV or JSON exports after the preview, or obtain explicit approval to skip existing records."},
+    {"capability":"auth_identities","source":"No user export supplied","outcome":"migrate_to_lovable_cloud","status":"pending","next_action":"Request user export after the preview; existing passwords and sessions cannot be transferred."},
+    {"capability":"profiles","source":"profiles table and signup trigger","outcome":"migrate","status":"migrated","next_action":"Verify profile editing in preview."},
+    {"capability":"authorization","source":"RLS policies and user_roles","outcome":"migrate","status":"migrated","next_action":"Verify owner isolation and final linter results."},
+    {"capability":"storage","source":"generations and avatars buckets","outcome":"migrate","status":"migrated","next_action":"Verify upload, archive and signed avatar access."},
+    {"capability":"image_generation","source":"Lovable AI Gateway image route","outcome":"preserve_and_harden","status":"migrated","next_action":"Verify successful generation and safety refusal recovery in preview."},
+    {"capability":"chat","source":"Streaming AI chat and saved threads","outcome":"preserve","status":"migrated","next_action":"Verify streaming and saved conversations in preview."},
+    {"capability":"code_workspace","source":"Cloud-saved workspace files and AI assistance","outcome":"preserve","status":"migrated","next_action":"Verify editor persistence in preview."},
+    {"capability":"security_center","source":"Auth events and API keys","outcome":"preserve","status":"migrated","next_action":"Verify security controls in preview."},
+    {"capability":"whatsapp_phone_auth","source":"Server functions and external WhatsApp API","outcome":"preserve","status":"blocked","next_action":"A valid WhatsApp Cloud API token and approved verification_code template are required for live verification."},
+    {"capability":"external_endpoints","source":"TanStack API routes","outcome":"preserve","status":"pending","next_action":"Retain chat, code assistance, image generation and image editing endpoints with authentication where private."},
+    {"capability":"verification","source":"Preview and protected flows","outcome":"verify","status":"pending","next_action":"Check mobile and desktop layouts, route guards, image archive behavior and safety refusal recovery."},
+    {"capability":"cutover","source":"Unpublished destination","outcome":"pending","status":"pending","next_action":"Publish only after preview verification and remaining provider credentials are available."}
+  ]
+}
