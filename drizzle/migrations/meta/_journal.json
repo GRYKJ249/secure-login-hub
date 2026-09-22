@@ -29,6 +29,13 @@
       "when": 1790053217819,
       "tag": "0003_function_grants",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790053232562,
+      "tag": "0004_phone_otps_deny_client_access",
+      "breakpoints": true
     }
   ]
 }
