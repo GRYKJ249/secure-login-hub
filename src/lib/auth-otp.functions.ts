@@ -77,7 +77,12 @@ export const requestPhoneCode = createServerFn({ method: "POST" })
     });
     if (error) {
       console.error("otp insert failed", error);
-      return { ok: false as const, error: "server_error" as const };
+      return {
+        ok: false as const,
+        error: "server_error" as const,
+        message: `${error.message}${error.hint ? ` (${error.hint})` : ""}`,
+      };
+
     }
 
     const { sendWhatsappCode, whatsappConfigured } = await import("@/lib/whatsapp.server");
