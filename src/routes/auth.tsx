@@ -208,11 +208,25 @@ function AuthPage() {
           send_failed: t("We couldn't send the code on WhatsApp.", "ما قدرنا نرسل الكود على واتساب."),
           server_error: t("Something went wrong. Try again.", "حصل خطأ. جرب تاني."),
         };
+        const reason = "reason" in result && result.reason ? String(result.reason) : null;
+        if (reason === "quota_exceeded") {
+          const allowed =
+            "allowedNumbers" in result && Array.isArray(result.allowedNumbers)
+              ? (result.allowedNumbers as string[]).join("، ")
+              : "";
+          toast.error(
+            t(
+              `The WhatsApp plan only allows sending to: ${allowed}`,
+              `باقة واتساب الحالية تسمح بالإرسال فقط للأرقام: ${allowed}`,
+            ),
+          );
+          return;
+        }
         const detail =
           "detail" in result && result.detail
             ? String(result.detail)
-            : "reason" in result && result.reason
-              ? String(result.reason)
+            : reason
+              ? reason
               : "message" in result && result.message
                 ? String(result.message)
                 : null;
@@ -221,6 +235,7 @@ function AuthPage() {
         toast.error(
           [messages[result.error] ?? messages["server_error"]!, extra].filter(Boolean).join("\n"),
         );
+
         return;
       }
       setPhone(fullPhone);
