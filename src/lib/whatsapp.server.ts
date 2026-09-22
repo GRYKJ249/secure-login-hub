@@ -84,8 +84,23 @@ export async function sendWhatsappCode(phone: string, code: string) {
 
   if (!idMessage) {
     console.error("whatsapp send returned no message id", body);
+    // Green API free tier answers 200 with a quota payload instead of idMessage.
+    if (/QUOTE_EXCEEDED|QUOTE_ALLOWED|quota/i.test(body)) {
+      const allowed = Array.from(new Set(body.match(/\d{8,15}@c\.us/g) ?? [])).map((x) =>
+        x.replace("@c.us", ""),
+      );
+      return {
+        sent: false as const,
+        reason: "quota_exceeded" as const,
+        allowedNumbers: allowed,
+        detail: allowed.length
+          ? `Green API free plan: only these numbers can receive messages: ${allowed.join(", ")}`
+          : "Green API monthly quota exceeded.",
+      };
+    }
     return { sent: false as const, reason: "provider_error" as const, detail: body.slice(0, 500) };
   }
+
 
   return { sent: true as const, idMessage };
 }
