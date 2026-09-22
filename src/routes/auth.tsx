@@ -205,10 +205,22 @@ function AuthPage() {
         const messages: Record<string, string> = {
           country_unavailable: t("Sign-up is not available for this country.", "التسجيل غير متاح لهذه الدولة."),
           too_many_requests: t("Too many codes requested. Try again later.", "طلبت أكواد كثيرة. جرب بعد شوية."),
-          send_failed: t("We couldn't send the code. Try again.", "ما قدرنا نرسل الكود. جرب تاني."),
+          send_failed: t("We couldn't send the code on WhatsApp.", "ما قدرنا نرسل الكود على واتساب."),
           server_error: t("Something went wrong. Try again.", "حصل خطأ. جرب تاني."),
         };
-        toast.error(messages[result.error] ?? messages["server_error"]!);
+        const detail =
+          "detail" in result && result.detail
+            ? String(result.detail)
+            : "reason" in result && result.reason
+              ? String(result.reason)
+              : "message" in result && result.message
+                ? String(result.message)
+                : null;
+        const state = "instanceState" in result && result.instanceState ? String(result.instanceState) : null;
+        const extra = [state ? `WhatsApp: ${state}` : null, detail].filter(Boolean).join(" — ");
+        toast.error(
+          [messages[result.error] ?? messages["server_error"]!, extra].filter(Boolean).join("\n"),
+        );
         return;
       }
       setPhone(fullPhone);
@@ -218,11 +230,16 @@ function AuthPage() {
       toast.success(t("Code sent on WhatsApp.", "تم إرسال الكود على واتساب."));
     } catch (error) {
       console.error(error);
-      toast.error(t("Something went wrong. Try again.", "حصل خطأ. جرب تاني."));
+      toast.error(
+        `${t("Something went wrong. Try again.", "حصل خطأ. جرب تاني.")}\n${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
     } finally {
       setBusy(false);
     }
   };
+
 
   const verify = async (value: string) => {
     setBusy(true);
